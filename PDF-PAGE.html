@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML para PDF</title>
+    <script src="js/pdfmake.js"></script>
+    <script src="js/vfs_fonts.min.js"></script>
+    <script src="js/html-to-pdfmake.js"></script>
+    <script src="js/Functio_apex.js"></script>
+    <style>
+        #P1_CONTENT {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            border: 1px solid #000;
+        }
+        #header {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            padding-top: 50px;
+        }
+        #header img {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+            height: auto;
+        }
+        #header h1, #header p {
+            margin: 0;
+        }
+        .section-content {
+            margin: 20px;
+            padding: 1px;
+        }
+        #response h6 {
+            background-color: gray;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <section style="text-align: center;">
+        <h1>HTML para PDF</h1>
+        <p>Converta seu HTML para PDF com o pdfmake.</p>
+
+        <div class="header_pdf">
+            <img id="P1_LOGO" src="img/brasao_spol.svg" alt="Logo Senado" id="img_header" style="width: 50px">
+            <h1>SECRETARIA DE POLÍCIA DO SENADO FEDERAL</h1>
+            <h2>Serviço de Treinamento Policial</h2>
+        </div>
+
+        <div id="TabVendas" style="display: flex;  flex-direction: column;">
+            <h1>Relatório de Vendas</h1>
+            <p>Esse Relatório contém dados atualizados sobre as vendas do mês.</p>
+            <table border="1">
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor</th>
+                </tr>
+                <tr>
+                    <td>Xbox 360 - Microsoft</td>
+                    <td>10</td>
+                    <td>R$ 1.500,00</td>
+                </tr>
+                <tr>
+                    <td>Playstation 4 - Sony</td>
+                    <td>15</td>
+                    <td>R$ 2.000,00</td>
+                </tr>
+                    <table>
+                        <tr>
+                          <th>Company</th>
+                          <th>Contact</th>
+                          <th>Country</th>
+                        </tr>
+                        <tr>
+                          <td>Alfreds Futterkiste</td>
+                          <td>Maria Anders</td>
+                          <td>Germany</td>
+                        </tr>
+                        <tr>
+                          <td>Centro comercial Moctezuma</td>
+                          <td>Francisco Chang</td>
+                          <td>Mexico</td>
+                        </tr>
+                      </table>
+            </table>
+
+            <div id="response">
+                <div id="base-legal" class="section-content">
+                    <h6 style="background-color: gray;">Base Legal</h6>
+                    <p>Constituição da República Federativa do Brasil (Art. 5º, XVI). Lei n.º 13.675, de 11 de junho de 2018. Política Nacional de Segurança Pública e Defesa Social. Lei n.º 6.456, de 26 de dezembro de 2019. Política Distrital de Segurança Pública...</p>
+                </div>
+                
+                <div id="objetivo-geral" class="section-content">
+                    <h6>Objetivo Geral</h6>
+                    <p>Planejar e executar ações de segurança pública envolvendo as Forças de Segurança Pública locais e federais, por ocasião do evento "VISITA DE ESTADO DO PRESIDENTE DA REPÚBLICA POPULAR DA CHINA, XI JINPING"...</p>
+                </div>
+                
+                <div id="cronograma" class="section-content">
+                    <h6>Cronograma</h6>
+                    <p>Conforme Ofícios nº 2.340/2024 e 2.373/2024 (155320286 e 155366686) do Ministério das Relações Exteriores (MRE)...</p>
+                </div>
+    
+                <div id="orientacao-geral" class="section-content">
+                    <h6>Orientação Geral</h6>
+                    <p>15/11/2024 (sexta-feira) - Instalação de toldos na via em frente à rampa de entrada do Palácio Itamaraty.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <button id="download"  onclick="generatePDF(1)" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: center;">Download da Tabela - PDF</button>
+
+    <script>
+        function generatePDF(num_pagina) {    
+
+            // Adiciona o método toDataURL() ao objeto HTMLImageElement
+            Object.defineProperty
+            (
+                HTMLImageElement.prototype, 'toDataURL',
+                {
+                    enumerable: false, configurable: true, writable: false, value: function (m, q) {
+                        let c = document.createElement('canvas');
+                        c.width = this.naturalWidth; c.height = this.naturalHeight;
+                        c.getContext('2d').drawImage(this, 0, 0); return c.toDataURL(m, q);
+                    }
+                }
+            );
+
+            var data = new Date();
+            var dia = data.getDate();           // 1-31
+            var mes = data.getMonth();          // 0-11 (zero=janeiro)
+            var ano = data.getFullYear();       // 4 dígitos
+            var hora = data.getHours();          // 0-23
+            var min = (data.getMinutes() < 10 ? '0' : '') + data.getMinutes();       // 00-59
+            var seg = (data.getSeconds()  < 10 ? '0' : '') + data.getSeconds();        // 00-59
+            var str_data = dia + '/' + (mes + 1) + '/' + ano;
+            var str_hora = hora + ':' + min + ':' + seg;
+	        var elementlogo = document.getElementById('P' + num_pagina + '_LOGO').toDataURL("image/jpeg");
+
+            const TabVendas = document.getElementById('TabVendas').innerHTML;
+            const PdfTabVendas= htmlToPdfmake(TabVendas);
+
+
+            const docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'portrait',
+                pageMargins: [30, 45], // Margens da página
+
+                // 📌 CABEÇALHO (Header)
+                header: {
+                    margin: [30, 20], // Margem do cabeçalho
+                    alignment: 'center', // Alinha o cabeçalho ao centro
+                    table: {
+                        //widths: [50, '*'], // Largura das colunas do cabeçalho
+                        body: [
+                            [
+                                { image: elementlogo, fit: [50, 50] }, // Logotipo
+                                { 
+                                    text: 'SECRETARIA DE POLÍCIA DO SENADO FEDERAL\nServiço de Treinamento Policial', 
+                                    style: 'headerTitle', 
+                                }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders' // Remove as bordas da tabela
+                },
+
+                // 📌 CONTEÚDO (Body)
+                content: [
+
+                        PdfTabVendas, 
+
+
+                ],
+
+
+                // 📌 RODAPÉ (Footer)
+                footer: function (currentPage, pageCount) {
+                    return {
+                        margin: [30, 10], // Margem do rodapé
+                        columns: [
+                            { text: 'Data: ' + str_data + ' - Hora: ' + str_hora, style: 'bodyText' , style: 'footerText' },
+                            { text: 'Documento gerado automaticamente.', style: 'footerText' },
+                            { text: `Página ${currentPage} de ${pageCount}`, alignment: 'right', style: 'footerText' }
+                        ]
+                    };
+                },
+
+                // 📌 ESTILOS CSS (Personalização)
+                styles: {
+                    headerTitle: {
+                        fontSize: 14,
+                        bold: true,
+                        alignment: 'left'
+                    },
+                    title: {
+                        fontSize: 16,
+                        bold: true,
+                        alignment: 'center',
+                        margin: [0, 20, 0, 10]
+                    },
+                    bodyText: {
+                        fontSize: 12,
+                        alignment: 'justify',
+                        margin: [0, 10],
+                        color: ' blue'
+                    },
+                    footerText: {
+                        fontSize: 10,
+                        italics: true,
+                        color: 'gray'
+                    },
+
+                }
+            };
+
+
+
+    
+            //pdfMake.createPdf(docDefinition).download("TestPdfMake.pdf");
+            pdfMake.createPdf(docDefinition).open();
+        }
+    </script>
+</body>
+</html>

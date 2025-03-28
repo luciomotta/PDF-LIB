@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <script src="js/pdf-lib.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesclar PDF</title>
 </head>
+
 <body>
     <h1>Mesclar PDF</h1>
     <form id="pdfForm">
-        <label for="pdf1">PDF 1:</label>
-        <input type="file" id="pdf1" accept="application/pdf" required><br><br>
-        <label for="pdf2">PDF 2:</label>
-        <input type="file" id="pdf2" accept="application/pdf" required><br><br>
-        <input type="file" id=""><br><br>
+        <label for="pdfs">PDFs:</label>
+        <input type="file" id="pdfs" accept="application/pdf" multiple required><br><br>
+        <!-- <label for="pdf2">PDF 2:</label>
+        <input type="file" id="pdf2" accept="application/pdf" required><br><br> -->
+        <!-- <input type="file" id=""><br><br> -->
         <button type="submit">Mesclar PDFs</button>
         <br><br><a href="https://youtu.be/sGi63j2wz8g?si=NW6R3e6xzwZ_8zWp">Tutorial PDF-LIB</a>
     </form>
@@ -22,30 +24,62 @@
         document.getElementById('pdfForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const pdf1 = document.getElementById('pdf1').files[0];
-            const pdf2 = document.getElementById('pdf2').files[0];
 
-            if (pdf1 && pdf2) {
-                const pdf1Bytes = await pdf1.arrayBuffer();
-                const pdf2Bytes = await pdf2.arrayBuffer();
-
-                const pdfDoc1 = await PDFLib.PDFDocument.load(pdf1Bytes);
-                const pdfDoc2 = await PDFLib.PDFDocument.load(pdf2Bytes);
-
-                const mergedPdf = await PDFLib.PDFDocument.create();
-                const copiedPages1 = await mergedPdf.copyPages(pdfDoc1, pdfDoc1.getPageIndices());
-                const copiedPages2 = await mergedPdf.copyPages(pdfDoc2, pdfDoc2.getPageIndices());
-
-                copiedPages1.forEach((page) => mergedPdf.addPage(page));
-                copiedPages2.forEach((page) => mergedPdf.addPage(page));
-
-                const mergedPdfBytes = await mergedPdf.save();
-                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-
-                window.open(url);
+            if (!document.getElementById('pdfs').files?.length) {
+                return
             }
+
+            const pdfDocs = [];
+
+            const pdfEl = document.getElementById('pdfs');
+
+            for (let i = 0; i < pdfEl.files.length; i++) {
+                const pdfBytes = await pdfEl.files[i].arrayBuffer();
+                pdfDocs.push(await PDFLib.PDFDocument.load(pdfBytes));
+            }
+
+            const mergedPdf = await PDFLib.PDFDocument.create();
+            for (const pdfDoc of pdfDocs) {
+                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                copiedPages.forEach((page) => mergedPdf.addPage(page));
+            }
+
+            const mergedPdfBytes = await mergedPdf.save();
+            const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+
+            window.open(url);
+
+
+
+            // const pdf1 = document.getElementById('pdf1').files[0];
+            // const pdf2 = document.getElementById('pdf2').files[0];
+
+            // if (pdf1 && pdf2) {
+            // const pdf1Bytes = await pdf1.arrayBuffer();
+            // const pdf2Bytes = await pdf2.arrayBuffer();
+
+            // const pdfDoc1 = await PDFLib.PDFDocument.load(pdf1Bytes);
+            // const pdfDoc2 = await PDFLib.PDFDocument.load(pdf2Bytes);
+
+            //         const mergedPdf = await PDFLib.PDFDocument.create();
+            //         const copiedPages1 = await mergedPdf.copyPages(pdfDoc1, pdfDoc1.getPageIndices());
+            //         const copiedPages2 = await mergedPdf.copyPages(pdfDoc2, pdfDoc2.getPageIndices());
+
+            //         copiedPages1.forEach((page) => mergedPdf.addPage(page));
+            //         copiedPages2.forEach((page) => mergedPdf.addPage(page));
+
+            //         const mergedPdfBytes = await mergedPdf.save();
+            //         const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            //         const url = URL.createObjectURL(blob);
+
+            //         window.open(url);
+            //     }
         });
     </script>
+
+
+
 </body>
+
 </html>
