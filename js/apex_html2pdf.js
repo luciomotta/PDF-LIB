@@ -3,7 +3,9 @@ function generatePDF() {
     const element = document.getElementById('P_PDF_CONTENT');
     const options= {
         margin: 10,
-        filename: 'PAII'+evento.numPaii+'.pdf', // Use the global evento variable
+    filename: 'PAII'+evento.numPaii+'.pdf', // Use the global evento variable
+    filename: 'PAII'+evento.numPaii+'.pdf', // Use the global evento variable
+    filename: 'PAII'+evento.numPaii+'.pdf', // Use the global evento variable
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
