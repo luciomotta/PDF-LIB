@@ -1,0 +1,116 @@
+<style>
+    div#header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        margin: 1%;
+    }
+    div#header h1, div#header h2, div#header h3 {
+        margin: 0;
+        text-align: center;
+        font-size: 1.2em;
+        //font-weight: bold;
+        color: #333;    
+    }
+    div#header img {
+        width: 100px;
+        height: auto;
+    }
+
+    div#bodypdf h2 {
+        font-size: 1.4em;
+        text-align: center;
+    }
+    div#bodypdf h3 {
+        //counter-increment: section;
+        background-color: #80808082; 
+        padding: 5px;
+        font-size: 1.2em; 
+        width: 100%;
+    }
+    /*
+    div#bodypdf h3::before {
+        content: counter(section) ". ";
+    }
+    */
+    #bodypdf table {
+        margin: auto; /* Centraliza horizontalmente */
+        border-collapse: collapse; /* Remove espaços entre as células */
+        width: 90%; /* Define uma largura padrão (opcional) */
+        text-align: center; /* Centraliza o conteúdo dentro das células */
+    }
+    #bodypdf table, th, td {
+        border: 1px solid black; /* Adiciona bordas */
+        padding: 10px; /* Adiciona espaço interno */
+    }
+    #bodypdf table {
+        margin: auto;
+        border-collapse: collapse;
+        background: white;
+        overflow: hidden;
+    }
+    /* Estiliza as células da tabela */
+    #bodypdf th, #bodypdf td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+    /* Cabeçalho com cor azul */
+    #bodypdf th {
+        background-color: #80808082;
+        color: black;
+    }
+    /* Cor alternada para linhas pares */
+    #bodypdf tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    /* Cor normal para linhas ímpares */
+    #bodypdf tr:nth-child(odd) {
+        background-color: white;
+    }
+    /* Estilo para o rodapé */
+    .footer {
+        display: flex;
+        justify-content: space-between;
+    }
+    .footer * {
+        text-align: center; 
+        font-size: 0.6em;
+    }
+
+    /* Estilo para garantir que todas as fontes dentro de #systemData tenham o mesmo tamanho */
+    #systemData, #systemData span {
+        font-size: 0.9em;
+    }
+</style>
+<body>
+    <section id="P_PDF_CONTENT">
+        <div id="header">
+            <img src="/img/brasao_spol.svg" alt="Logo Polícia do Senado Federal"id="logo_spol"><!--#APP_FILES#icons/brasaoSPOL.svg-->
+         <div>
+            <h1>Senado Federal</h1>
+            <h1>SECRETARIA DE POLÍCIA DO SENADO FEDERAL</h1>
+            <h2>Plano de Ação Integrada Interna - PAII</h2>
+            <h3 >PAII nº <span id="referencia"></span></h3>
+          </div>
+          <img src="/img/armas_nacionais_vertical_colorida.svg" alt="Armas Nacionais do Brasil" class="logo Arma da Republica" style="width: 192px;height: 151px;" />
+        </div>
+        <div id="bodypdf">
+        </div>
+        <div class="footer" >
+            <p>Este documento é de uso restrito e não deve ser divulgado sem autorização prévia.</p>
+            <p id="systemData" >SEVEN - emissão: <span id="sysDate"></span> Gerado por: &APP_USER.</p>
+            <script>
+                //document.getElementById("systemData").innerHTML = document.getElementById("P34_AUX_SYSDATE_NOM").value;
+                        setInterval(() => {
+                            const date = new Date();
+                            const formattedDate = date.toLocaleString();
+                            document.getElementById('sysDate').innerHTML = formattedDate;
+                        })
+            </script>
+        </div>
+    </section>
+    </body>
+</html>
